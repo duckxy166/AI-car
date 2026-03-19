@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://w7rc0m4vgjga" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
 [ext_resource type="PackedScene" uid="uid://cphg0pfm8plid" path="res://scenes/parking_lot.tscn" id="2_lot"]
 [ext_resource type="Script" uid="uid://l8dq0k2j8oix" path="res://scenes/speedometer.gd" id="3_38kcf"]
+[ext_resource type="Script" path="res://scripts/test_drive_hud.gd" id="4_hud"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 sky_top_color = Color(0.25, 0.45, 0.85, 1)
@@ -58,3 +59,119 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -1.0
 offset_top = -23.0
+
+[node name="GameHUD" type="Node" parent="."]
+script = ExtResource("4_hud")
+
+[node name="TimerHUD" type="CanvasLayer" parent="GameHUD"]
+
+[node name="Panel" type="Panel" parent="GameHUD/TimerHUD"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 280.0
+offset_bottom = 150.0
+
+[node name="TimeLabel" type="Label" parent="GameHUD/TimerHUD/Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 250.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 40
+text = "0:00.00"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="GameHUD/TimerHUD/Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 58.0
+offset_right = 250.0
+offset_bottom = 82.0
+theme_override_colors/font_color = Color(1, 0.9, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "PARK IT! (R = restart)"
+horizontal_alignment = 1
+
+[node name="BestLabel" type="Label" parent="GameHUD/TimerHUD/Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 85.0
+offset_right = 250.0
+offset_bottom = 105.0
+theme_override_colors/font_color = Color(0.3, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="StatsLabel" type="Label" parent="GameHUD/TimerHUD/Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 108.0
+offset_right = 250.0
+offset_bottom = 128.0
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 14
+text = "Attempts: 0  |  Success: 0"
+horizontal_alignment = 1
+
+[node name="ResultLabel" type="Label" parent="GameHUD/TimerHUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -100.0
+offset_right = 250.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(1, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 72
+text = "PARKED!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameInputHUD" type="CanvasLayer" parent="GameHUD"]
+
+[node name="Panel" type="Panel" parent="GameHUD/NameInputHUD"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -80.0
+offset_right = 200.0
+offset_bottom = 80.0
+
+[node name="Title" type="Label" parent="GameHUD/NameInputHUD/Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 390.0
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(1, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 24
+text = "ENTER YOUR NAME"
+horizontal_alignment = 1
+
+[node name="NameEdit" type="LineEdit" parent="GameHUD/NameInputHUD/Panel"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 55.0
+offset_right = 360.0
+offset_bottom = 90.0
+theme_override_font_sizes/font_size = 20
+placeholder_text = "Player"
+alignment = 1
+
+[node name="Hint" type="Label" parent="GameHUD/NameInputHUD/Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 100.0
+offset_right = 390.0
+offset_bottom = 130.0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 14
+text = "Press ENTER to start"
+horizontal_alignment = 1

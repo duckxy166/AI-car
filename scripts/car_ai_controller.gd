@@ -226,9 +226,9 @@ func _physics_process(delta):
 			
 		var target_throttle = 0.0
 		if Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP):
-			target_throttle -= 1.0
-		if Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN):
 			target_throttle += 1.0
+		if Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN):
+			target_throttle -= 1.0
 
 		if car:
 			car.steer_input = lerp(car.steer_input, target_steer, delta * 12.0)
