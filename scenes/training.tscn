@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
+[ext_resource type="PackedScene" path="res://scenes/parking_lot.tscn" id="2_lot"]
+
+[node name="Training" type="Node3D"]
+
+[node name="Sync" type="Node" parent="."]
+script = ExtResource("1_sync")
+control_mode = 1
+action_repeat = 4
+speed_up = 8.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 20, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="Env0" parent="." instance=ExtResource("2_lot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Env1" parent="." instance=ExtResource("2_lot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 0)
+
+[node name="Env2" parent="." instance=ExtResource("2_lot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0)
+
+[node name="Env3" parent="." instance=ExtResource("2_lot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
+
+[node name="Env4" parent="." instance=ExtResource("2_lot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
+
+[node name="Env5" parent="." instance=ExtResource("2_lot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50)
+
+[node name="Env6" parent="." instance=ExtResource("2_lot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 50)
+
+[node name="Env7" parent="." instance=ExtResource("2_lot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 50)
