@@ -1,0 +1,30 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="AI-car"
+run/main_scene="res://scenes/test_drive.tscn"
+config/features=PackedStringArray("4.6")
+
+[dotnet]
+
+project/assembly_name="AI-car"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_rl_agents/plugin.cfg")
+
+[input]
+
+ui_left="{\"deadzone\": 0.5, \"events\": [{\"pressed\": true, \"type\": 5, \"Physical\": 16777231}]}"
+ui_right="{\"deadzone\": 0.5, \"events\": [{\"Physical\": 68, \"pressed\": true, \"type\": 1}]}"
+ui_up="{\"deadzone\": 0.5, \"events\": [{\"pressed\": true, \"type\": 5, \"Physical\": 16777232}]}"
+ui_down="{\"deadzone\": 0.5, \"events\": [{\"pressed\": true, \"type\": 5, \"Physical\": 16777234}]}"

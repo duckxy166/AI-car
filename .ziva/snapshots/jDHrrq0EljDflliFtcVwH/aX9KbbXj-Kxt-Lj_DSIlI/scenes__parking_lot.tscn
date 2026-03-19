@@ -1,0 +1,182 @@
+[gd_scene format=3 uid="uid://cphg0pfm8plid"]
+
+[ext_resource type="Script" uid="uid://cdedxfvui1ox2" path="res://scripts/parking_lot.gd" id="1_lot"]
+[ext_resource type="PackedScene" uid="uid://bykb5103vkmq3" path="res://scenes/car.tscn" id="2_car"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(30, 0.2, 30)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+albedo_color = Color(0.25, 0.25, 0.28, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+material = SubResource("StandardMaterial3D_ground")
+size = Vector3(30, 0.2, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ns"]
+size = Vector3(30, 2, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.6, 0.6, 0.55, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_n"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(30, 2, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_s"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(30, 2, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ew"]
+size = Vector3(0.3, 2, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_e"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(0.3, 2, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_w"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(0.3, 2, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_parking"]
+size = Vector3(3, 0.5, 5.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_spot"]
+transparency = 1
+albedo_color = Color(0.2, 0.8, 0.3, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_spot"]
+material = SubResource("StandardMaterial3D_spot")
+size = Vector3(3, 0.05, 5.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_obstacle"]
+size = Vector3(2, 1.2, 4.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blue"]
+albedo_color = Color(0.1, 0.2, 0.7, 1)
+metallic = 0.3
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_white"]
+albedo_color = Color(0.9, 0.9, 0.95, 1)
+metallic = 0.2
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_black"]
+albedo_color = Color(0.15, 0.15, 0.18, 1)
+metallic = 0.2
+roughness = 0.6
+
+[node name="ParkingLot" type="Node3D" unique_id=1362271962]
+script = ExtResource("1_lot")
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=327304349]
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=970218212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26470947, 0)
+shape = SubResource("BoxShape3D_ground")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=2125211089]
+mesh = SubResource("BoxMesh_ground")
+
+[node name="WallNorth" type="StaticBody3D" parent="." unique_id=377022197]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -15)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallNorth" unique_id=1270239488]
+shape = SubResource("BoxShape3D_wall_ns")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallNorth" unique_id=29508918]
+mesh = SubResource("BoxMesh_wall_n")
+
+[node name="WallSouth" type="StaticBody3D" parent="." unique_id=1245163934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 15)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth" unique_id=1022284648]
+shape = SubResource("BoxShape3D_wall_ns")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallSouth" unique_id=1873173321]
+mesh = SubResource("BoxMesh_wall_s")
+
+[node name="WallEast" type="StaticBody3D" parent="." unique_id=1528936035]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 0)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast" unique_id=2014152747]
+shape = SubResource("BoxShape3D_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallEast" unique_id=1231200426]
+mesh = SubResource("BoxMesh_wall_e")
+
+[node name="WallWest" type="StaticBody3D" parent="." unique_id=1959725388]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 1, 0)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest" unique_id=150526511]
+shape = SubResource("BoxShape3D_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallWest" unique_id=1770825919]
+mesh = SubResource("BoxMesh_wall_w")
+
+[node name="ParkingTarget" type="Area3D" parent="." unique_id=545735696]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -12)
+collision_layer = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ParkingTarget" unique_id=3815305]
+shape = SubResource("BoxShape3D_parking")
+
+[node name="SpotVisual" type="MeshInstance3D" parent="ParkingTarget" unique_id=1738298551]
+mesh = SubResource("BoxMesh_spot")
+
+[node name="ObstacleCar1" type="StaticBody3D" parent="." unique_id=568200153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.5, -12)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar1" unique_id=712412803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_obstacle")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar1" unique_id=1992559574]
+material_override = SubResource("StandardMaterial3D_blue")
+
+[node name="ObstacleCar2" type="StaticBody3D" parent="." unique_id=357208946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.5, -12)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar2" unique_id=202479824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_obstacle")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar2" unique_id=866712356]
+material_override = SubResource("StandardMaterial3D_white")
+
+[node name="ObstacleCar3" type="StaticBody3D" parent="." unique_id=64473523]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.5, -12)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar3" unique_id=1746004246]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_obstacle")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar3" unique_id=107889074]
+material_override = SubResource("StandardMaterial3D_black")
+
+[node name="ObstacleCar4" type="StaticBody3D" parent="." unique_id=92180826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.5, -12)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar4" unique_id=1983591755]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_obstacle")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar4" unique_id=922679322]
+material_override = SubResource("StandardMaterial3D_black")
+
+[node name="Car" parent="." unique_id=1688230247 instance=ExtResource("2_car")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -3)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=259622479]
+transform = Transform3D(-0.18398789, 0.2758031, -0.9434411, 0, 0.95982677, 0.28059322, 0.9829285, 0.051625755, -0.17659649, -9.192215, 2.3049583, -4.331192)
+fov = 50.0

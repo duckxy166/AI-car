@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
+[ext_resource type="PackedScene" path="res://scenes/parking_lot.tscn" id="2_lot"]
+
+[node name="TestDrive" type="Node3D"]
+
+[node name="Sync" type="Node" parent="."]
+script = ExtResource("1_sync")
+control_mode = 0
+action_repeat = 1
+speed_up = 1.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 20, 0)
+shadow_enabled = true
+
+[node name="ParkingLot" parent="." instance=ExtResource("2_lot")]

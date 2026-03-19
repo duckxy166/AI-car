@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="AI-car"
+run/main_scene="res://scenes/test_drive.tscn"
 config/features=PackedStringArray("4.6")
-run/main_scene="res://scenes/training.tscn"
 
 [dotnet]
 
@@ -21,3 +21,16 @@ project/assembly_name="AI-car"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_rl_agents/plugin.cfg")
+
+[input]
+
+ui_left="{\"deadzone\": 0.5, \"events\": [{\"PhysicalDevice\": -1, \"ButtonMask\": 14, \"Position\": Vector2(0, 0), \"Character\": 0, \"KeyLabel\": 0, \"Scancode\": 0, \"Unicode\": 0, \"Echo\": false, \"Pressed\": false, \"Project\": Object(InputEventMouseButton,\"resource_local_to_scene\":false,\"resource_name\":\"\",\"device\":-1,\"window_id\":0,\"alt_pressed\":false,\"shift_pressed\":false,\"ctrl_pressed\":false,\"meta_pressed\":false,\"button_mask\":14,\"position\":Vector2(0, 0),\"global_position\":Vector2(0, 0),\"factor\":1.0,\"button_index\":1,\"canceled\":false,\"pressed\":true,\"double_click\":false,\"script\":null)}]}"
+ui_right="{\"deadzone\": 0.5, \"events\": [{\"Physical\": 68, \"pressed\": true, \"type\": 1}]}"
+ui_up="{\"deadzone\": 0.5, \"events\": [{\"pressed\": true, \"type\": 5, \"Physical\": 16777232}]}"
+ui_down="{\"deadzone\": 0.5, \"events\": [{\"pressed\": true, \"type\": 5, \"Physical\": 16777234}]}"
+ui_up/events/0="{\"PhysicalDevice\":-1,\"ButtonMask\":0,\"Position\":{\"x\":0,\"y\":0},\"Character\":0,\"KeyLabel\":0,\"Scancode\":87,\"Unicode\":0,\"Echo\":false,\"Pressed\":false,\"Project\":Object(InputEventKey,\"resource_local_to_scene\":false,\"resource_name\":\"\",\"device\":-1,\"window_id\":0,\"alt_pressed\":false,\"shift_pressed\":false,\"ctrl_pressed\":false,\"meta_pressed\":false,\"button_mask\":0,\"position\":{\"x\":0,\"y\":0},\"global_position\":{\"x\":0,\"y\":0},\"factor\":1.0,\"button_index\":0,\"canceled\":false,\"pressed\":false,\"double_click\":false,\"script\":null)"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

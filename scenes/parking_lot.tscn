@@ -1,191 +1,424 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene format=3 uid="uid://cphg0pfm8plid"]
 
-[ext_resource type="Script" path="res://scripts/parking_lot.gd" id="1_lot"]
-[ext_resource type="PackedScene" path="res://scenes/car.tscn" id="2_car"]
-[ext_resource type="ArrayMesh" uid="uid://ch4tmhheoqtut" path="res://asset/car/jeep.obj" id="3_jeep"]
-[ext_resource type="ArrayMesh" uid="uid://bg6r8ll776mu6" path="res://asset/car/police.obj" id="4_police"]
-[ext_resource type="ArrayMesh" uid="uid://bhn14xh8tgqfs" path="res://asset/car/van.obj" id="5_van"]
+[ext_resource type="Script" uid="uid://cdedxfvui1ox2" path="res://scripts/parking_lot.gd" id="1_lot"]
+[ext_resource type="PackedScene" uid="uid://bykb5103vkmq3" path="res://scenes/car.tscn" id="2_car"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
-size = Vector3(30.0, 0.2, 30.0)
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ground"]
+friction = 0.8
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
-albedo_color = Color(0.25, 0.25, 0.28, 1.0)
+[sub_resource type="StandardMaterial3D" id="Mat_ground"]
+albedo_color = Color(0.22, 0.22, 0.25, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ground"]
-size = Vector3(30.0, 0.2, 30.0)
-material = SubResource("StandardMaterial3D_ground")
+[sub_resource type="BoxMesh" id="Mesh_ground"]
+material = SubResource("Mat_ground")
+size = Vector3(60, 0.2, 60)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ns"]
-size = Vector3(30.0, 2.0, 0.3)
+[sub_resource type="BoxShape3D" id="Shape_ground"]
+size = Vector3(60, 0.2, 60)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ew"]
-size = Vector3(0.3, 2.0, 30.0)
+[sub_resource type="StandardMaterial3D" id="Mat_road"]
+albedo_color = Color(0.35, 0.35, 0.38, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_obstacle"]
-size = Vector3(2.0, 1.2, 4.5)
+[sub_resource type="BoxMesh" id="Mesh_road_vert"]
+material = SubResource("Mat_road")
+size = Vector3(10, 0.02, 30)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
-albedo_color = Color(0.6, 0.6, 0.55, 1.0)
+[sub_resource type="BoxMesh" id="Mesh_road_horiz"]
+material = SubResource("Mat_road")
+size = Vector3(30, 0.02, 10)
 
-[sub_resource type="BoxMesh" id="BoxMesh_wall_n"]
-size = Vector3(30.0, 2.0, 0.3)
-material = SubResource("StandardMaterial3D_wall")
+[sub_resource type="BoxMesh" id="Mesh_road_curve"]
+material = SubResource("Mat_road")
+size = Vector3(16, 0.02, 16)
 
-[sub_resource type="BoxMesh" id="BoxMesh_wall_s"]
-size = Vector3(30.0, 2.0, 0.3)
-material = SubResource("StandardMaterial3D_wall")
+[sub_resource type="BoxShape3D" id="Shape_oleft"]
+size = Vector3(0.5, 2, 35)
 
-[sub_resource type="BoxMesh" id="BoxMesh_wall_e"]
-size = Vector3(0.3, 2.0, 30.0)
-material = SubResource("StandardMaterial3D_wall")
+[sub_resource type="StandardMaterial3D" id="Mat_wall"]
+albedo_color = Color(0.7, 0.7, 0.65, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_wall_w"]
-size = Vector3(0.3, 2.0, 30.0)
-material = SubResource("StandardMaterial3D_wall")
+[sub_resource type="BoxMesh" id="Mesh_oleft"]
+material = SubResource("Mat_wall")
+size = Vector3(0.5, 2, 35)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_parking"]
-size = Vector3(3.0, 0.5, 5.5)
+[sub_resource type="BoxShape3D" id="Shape_obottom"]
+size = Vector3(40, 2, 0.5)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_spot"]
-albedo_color = Color(0.2, 0.8, 0.3, 0.4)
+[sub_resource type="BoxMesh" id="Mesh_obottom"]
+material = SubResource("Mat_wall")
+size = Vector3(40, 2, 0.5)
+
+[sub_resource type="BoxShape3D" id="Shape_top"]
+size = Vector3(10, 2, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_top"]
+material = SubResource("Mat_wall")
+size = Vector3(10, 2, 0.5)
+
+[sub_resource type="BoxShape3D" id="Shape_right"]
+size = Vector3(0.5, 2, 10)
+
+[sub_resource type="BoxMesh" id="Mesh_right"]
+material = SubResource("Mat_wall")
+size = Vector3(0.5, 2, 10)
+
+[sub_resource type="BoxShape3D" id="Shape_ivert"]
+size = Vector3(0.5, 2, 15)
+
+[sub_resource type="BoxMesh" id="Mesh_ivert"]
+material = SubResource("Mat_wall")
+size = Vector3(0.5, 2, 15)
+
+[sub_resource type="BoxShape3D" id="Shape_icurve"]
+size = Vector3(0.5, 2, 6)
+
+[sub_resource type="BoxMesh" id="Mesh_icurve"]
+material = SubResource("Mat_wall")
+size = Vector3(0.5, 2, 6)
+
+[sub_resource type="BoxShape3D" id="Shape_icurve2"]
+size = Vector3(0.5, 2, 7)
+
+[sub_resource type="BoxMesh" id="Mesh_icurve2"]
+material = SubResource("Mat_wall")
+size = Vector3(0.5, 2, 7)
+
+[sub_resource type="BoxShape3D" id="Shape_icurve3"]
+size = Vector3(0.5, 2, 6)
+
+[sub_resource type="BoxMesh" id="Mesh_icurve3"]
+material = SubResource("Mat_wall")
+size = Vector3(0.5, 2, 6)
+
+[sub_resource type="BoxShape3D" id="Shape_ihoriz"]
+size = Vector3(16, 2, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_ihoriz"]
+material = SubResource("Mat_wall")
+size = Vector3(16, 2, 0.5)
+
+[sub_resource type="BoxShape3D" id="Shape_parking"]
+size = Vector3(3, 0.5, 5.5)
+
+[sub_resource type="StandardMaterial3D" id="Mat_spot"]
 transparency = 1
+albedo_color = Color(0.2, 0.8, 0.3, 0.4)
 
-[sub_resource type="BoxMesh" id="BoxMesh_spot"]
-size = Vector3(3.0, 0.05, 5.5)
-material = SubResource("StandardMaterial3D_spot")
+[sub_resource type="BoxMesh" id="Mesh_spot"]
+material = SubResource("Mat_spot")
+size = Vector3(3, 0.05, 5.5)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blue"]
-albedo_color = Color(0.1, 0.2, 0.7, 1.0)
+[sub_resource type="BoxShape3D" id="Shape_obstacle"]
+size = Vector3(2, 1.2, 4.5)
+
+[sub_resource type="StandardMaterial3D" id="Mat_blue"]
+albedo_color = Color(0.1, 0.2, 0.7, 1)
 metallic = 0.3
 roughness = 0.4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_white"]
-albedo_color = Color(0.9, 0.9, 0.95, 1.0)
+[sub_resource type="BoxMesh" id="BoxMesh_rmsgb"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_white"]
+albedo_color = Color(0.9, 0.9, 0.95, 1)
 metallic = 0.2
 roughness = 0.5
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_black"]
-albedo_color = Color(0.15, 0.15, 0.18, 1.0)
-metallic = 0.2
-roughness = 0.6
+[sub_resource type="BoxMesh" id="BoxMesh_h57tm"]
 
-[node name="ParkingLot" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="Mat_red"]
+albedo_color = Color(0.7, 0.1, 0.1, 1)
+metallic = 0.3
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_pekt7"]
+
+[node name="ParkingLot" type="Node3D" unique_id=412195096]
 script = ExtResource("1_lot")
 
-[node name="Ground" type="StaticBody3D" parent="."]
+[node name="Ground" type="StaticBody3D" parent="." unique_id=930969955]
 collision_layer = 2
+physics_material_override = SubResource("PhysicsMaterial_ground")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
-shape = SubResource("BoxShape3D_ground")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=867162828]
+mesh = SubResource("Mesh_ground")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
-mesh = SubResource("BoxMesh_ground")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1734247621]
+shape = SubResource("Shape_ground")
 
-[node name="WallNorth" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -15)
+[node name="RoadVert" type="MeshInstance3D" parent="." unique_id=843794404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.11, -5)
+mesh = SubResource("Mesh_road_vert")
+
+[node name="RoadHoriz" type="MeshInstance3D" parent="." unique_id=1789362592]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.007805, 0.15792952, 9.960421)
+mesh = SubResource("Mesh_road_horiz")
+
+[node name="RoadCurve" type="MeshInstance3D" parent="." unique_id=1263543658]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.11, 3)
+mesh = SubResource("Mesh_road_curve")
+
+[node name="WallOuterLeft" type="StaticBody3D" parent="." unique_id=48837554]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 1, -2.5)
 collision_layer = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallNorth"]
-shape = SubResource("BoxShape3D_wall_ns")
+[node name="Col" type="CollisionShape3D" parent="WallOuterLeft" unique_id=1743882750]
+shape = SubResource("Shape_oleft")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WallNorth"]
-mesh = SubResource("BoxMesh_wall_n")
+[node name="Mesh" type="MeshInstance3D" parent="WallOuterLeft" unique_id=663956518]
+mesh = SubResource("Mesh_oleft")
 
-[node name="WallSouth" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 15)
+[node name="WallOuterBottom" type="StaticBody3D" parent="." unique_id=2144651484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 15)
 collision_layer = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth"]
-shape = SubResource("BoxShape3D_wall_ns")
+[node name="Col" type="CollisionShape3D" parent="WallOuterBottom" unique_id=1876993802]
+shape = SubResource("Shape_obottom")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WallSouth"]
-mesh = SubResource("BoxMesh_wall_s")
+[node name="Mesh" type="MeshInstance3D" parent="WallOuterBottom" unique_id=1812801759]
+mesh = SubResource("Mesh_obottom")
 
-[node name="WallEast" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 0)
+[node name="WallTop" type="StaticBody3D" parent="." unique_id=449094974]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, -20)
 collision_layer = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast"]
-shape = SubResource("BoxShape3D_wall_ew")
+[node name="Col" type="CollisionShape3D" parent="WallTop" unique_id=1117747928]
+shape = SubResource("Shape_top")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WallEast"]
-mesh = SubResource("BoxMesh_wall_e")
+[node name="Mesh" type="MeshInstance3D" parent="WallTop" unique_id=949771198]
+mesh = SubResource("Mesh_top")
 
-[node name="WallWest" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 1, 0)
+[node name="WallRight" type="StaticBody3D" parent="." unique_id=846939695]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 1, 10)
 collision_layer = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest"]
-shape = SubResource("BoxShape3D_wall_ew")
+[node name="Col" type="CollisionShape3D" parent="WallRight" unique_id=337705979]
+shape = SubResource("Shape_right")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WallWest"]
-mesh = SubResource("BoxMesh_wall_w")
+[node name="Mesh" type="MeshInstance3D" parent="WallRight" unique_id=389757934]
+mesh = SubResource("Mesh_right")
 
-[node name="ParkingTarget" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -12)
+[node name="WallInnerVert" type="StaticBody3D" parent="." unique_id=1493236641]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, -12.5)
+collision_layer = 4
+
+[node name="Col" type="CollisionShape3D" parent="WallInnerVert" unique_id=1531302228]
+shape = SubResource("Shape_ivert")
+
+[node name="Mesh" type="MeshInstance3D" parent="WallInnerVert" unique_id=507743474]
+mesh = SubResource("Mesh_ivert")
+
+[node name="WallInnerCurve1" type="StaticBody3D" parent="." unique_id=1755165730]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, -4, 1, -3)
+collision_layer = 4
+
+[node name="Col" type="CollisionShape3D" parent="WallInnerCurve1" unique_id=1228736033]
+shape = SubResource("Shape_icurve")
+
+[node name="Mesh" type="MeshInstance3D" parent="WallInnerCurve1" unique_id=937471652]
+mesh = SubResource("Mesh_icurve")
+
+[node name="WallInnerCurve2" type="StaticBody3D" parent="." unique_id=1878823897]
+transform = Transform3D(0.5, 0, 0.866, 0, 1, 0, -0.866, 0, 0.5, -0.5, 1, 1)
+collision_layer = 4
+
+[node name="Col" type="CollisionShape3D" parent="WallInnerCurve2" unique_id=744694464]
+shape = SubResource("Shape_icurve2")
+
+[node name="Mesh" type="MeshInstance3D" parent="WallInnerCurve2" unique_id=1647331835]
+mesh = SubResource("Mesh_icurve2")
+
+[node name="WallInnerCurve3" type="StaticBody3D" parent="." unique_id=701207338]
+transform = Transform3D(0.259, 0, 0.966, 0, 1, 0, -0.966, 0, 0.259, 4, 1, 4)
+collision_layer = 4
+
+[node name="Col" type="CollisionShape3D" parent="WallInnerCurve3" unique_id=1409762050]
+shape = SubResource("Shape_icurve3")
+
+[node name="Mesh" type="MeshInstance3D" parent="WallInnerCurve3" unique_id=1858342923]
+mesh = SubResource("Mesh_icurve3")
+
+[node name="WallInnerHoriz" type="StaticBody3D" parent="." unique_id=1172055029]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 5)
+collision_layer = 4
+
+[node name="Col" type="CollisionShape3D" parent="WallInnerHoriz" unique_id=162906480]
+shape = SubResource("Shape_ihoriz")
+
+[node name="Mesh" type="MeshInstance3D" parent="WallInnerHoriz" unique_id=1720471508]
+mesh = SubResource("Mesh_ihoriz")
+
+[node name="ParkingTarget" type="Area3D" parent="." unique_id=2122023094]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.3, 10)
 collision_layer = 8
-collision_mask = 1
-monitorable = true
-monitoring = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ParkingTarget"]
-shape = SubResource("BoxShape3D_parking")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ParkingTarget" unique_id=1660511397]
+shape = SubResource("Shape_parking")
 
-[node name="SpotVisual" type="MeshInstance3D" parent="ParkingTarget"]
-mesh = SubResource("BoxMesh_spot")
+[node name="SpotVisual" type="MeshInstance3D" parent="ParkingTarget" unique_id=17865247]
+mesh = SubResource("Mesh_spot")
 
-[node name="ObstacleCar1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.5, -12)
+[node name="ObstacleCar1" type="StaticBody3D" parent="." unique_id=650135509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0.5, 12.392517)
 collision_layer = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar1" unique_id=558809196]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-shape = SubResource("BoxShape3D_obstacle")
+shape = SubResource("Shape_obstacle")
+debug_color = Color(0.47622985, 0.4397625, 1, 0.41960785)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar1"]
-mesh = ExtResource("3_jeep")
-material_override = SubResource("StandardMaterial3D_blue")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar1" unique_id=129951278]
+transform = Transform3D(1.9239786, 0, 0, 0, 1, 0, 0, 0, 4.5351768, 0, 0, 0)
+material_override = SubResource("Mat_blue")
+mesh = SubResource("BoxMesh_rmsgb")
 
-[node name="ObstacleCar2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.5, -12)
+[node name="ObstacleCar2" type="StaticBody3D" parent="." unique_id=703340298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.5, 0.5, 12.153226)
 collision_layer = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar2" unique_id=308423774]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-shape = SubResource("BoxShape3D_obstacle")
+shape = SubResource("Shape_obstacle")
+debug_color = Color(0.47622985, 0.4397625, 1, 0.41960785)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar2"]
-mesh = ExtResource("4_police")
-material_override = SubResource("StandardMaterial3D_white")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar2" unique_id=257475605]
+transform = Transform3D(2.2112844, 0, 0, 0, 1, 0, 0, 0, 5.0676417, 0, 0, 0)
+material_override = SubResource("Mat_white")
+mesh = SubResource("BoxMesh_h57tm")
 
-[node name="ObstacleCar3" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0, 0.5, -12)
+[node name="ObstacleCar3" type="StaticBody3D" parent="." unique_id=438259113]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0.5, 12.560715)
 collision_layer = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar3" unique_id=548547797]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-shape = SubResource("BoxShape3D_obstacle")
+shape = SubResource("Shape_obstacle")
+debug_color = Color(0.47622985, 0.4397625, 1, 0.41960785)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar3"]
-mesh = ExtResource("5_van")
-material_override = SubResource("StandardMaterial3D_black")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar3" unique_id=260129898]
+transform = Transform3D(2.186605, 0, 0, 0, 1, 0, 0, 0, 4.5277915, 0, 0, 0)
+material_override = SubResource("Mat_red")
+mesh = SubResource("BoxMesh_pekt7")
 
-[node name="ObstacleCar4" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 0.5, -12)
-collision_layer = 4
+[node name="Car" parent="." unique_id=1789605334 instance=ExtResource("2_car")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.55, -15)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleCar4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-shape = SubResource("BoxShape3D_obstacle")
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1152809077]
+transform = Transform3D(0, 0.44, -0.9, 0, 0.9, 0.44, 1, 0, 0, -30, 18, 0)
+fov = 60.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleCar4"]
-mesh = ExtResource("3_jeep")
-material_override = SubResource("StandardMaterial3D_black")
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2112899688]
+transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 20, 0)
+shadow_enabled = true
 
-[node name="Car" parent="." instance=ExtResource("2_car")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -3)
+[node name="TimerHUD" type="CanvasLayer" parent="." unique_id=796574208]
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0.866, 0, -0.866, 0.5, 0, 25, 10)
-fov = 50.0
+[node name="Panel" type="Panel" parent="TimerHUD" unique_id=296160110]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 280.0
+offset_bottom = 150.0
+
+[node name="TimeLabel" type="Label" parent="TimerHUD/Panel" unique_id=663201839]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 250.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 40
+text = "0:00.00"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="TimerHUD/Panel" unique_id=1372472355]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 58.0
+offset_right = 250.0
+offset_bottom = 82.0
+theme_override_colors/font_color = Color(1, 0.9, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "PARK IT! (R = restart)"
+horizontal_alignment = 1
+
+[node name="BestLabel" type="Label" parent="TimerHUD/Panel" unique_id=2035264817]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 85.0
+offset_right = 250.0
+offset_bottom = 105.0
+theme_override_colors/font_color = Color(0.3, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="StatsLabel" type="Label" parent="TimerHUD/Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 108.0
+offset_right = 250.0
+offset_bottom = 128.0
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 14
+text = "Attempts: 0  |  Success: 0"
+horizontal_alignment = 1
+
+[node name="ResultLabel" type="Label" parent="TimerHUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -100.0
+offset_right = 250.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(1, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 72
+text = "PARKED!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameInputHUD" type="CanvasLayer" parent="." unique_id=1080468997]
+
+[node name="Panel" type="Panel" parent="NameInputHUD" unique_id=447832391]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -80.0
+offset_right = 200.0
+offset_bottom = 80.0
+
+[node name="Title" type="Label" parent="NameInputHUD/Panel" unique_id=454037441]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 390.0
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(1, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 24
+text = "ENTER YOUR NAME"
+horizontal_alignment = 1
+
+[node name="NameEdit" type="LineEdit" parent="NameInputHUD/Panel" unique_id=1378303173]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 55.0
+offset_right = 360.0
+offset_bottom = 90.0
+theme_override_font_sizes/font_size = 20
+placeholder_text = "Player"
+alignment = 1
+
+[node name="Hint" type="Label" parent="NameInputHUD/Panel" unique_id=2100480805]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 100.0
+offset_right = 390.0
+offset_bottom = 130.0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 14
+text = "Press ENTER to start"
+horizontal_alignment = 1

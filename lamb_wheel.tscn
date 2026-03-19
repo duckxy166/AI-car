@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://7ro88s8uowvd"]
+
+[ext_resource type="PackedScene" uid="uid://dh7adya1j7rof" path="res://asset/car/lamb.glb" id="1_vmqvw"]
+
+[node name="lamb2" unique_id=852257394 instance=ExtResource("1_vmqvw")]

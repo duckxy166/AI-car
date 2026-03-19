@@ -5,7 +5,7 @@ extends AIController3D
 ## Actions: 2 continuous (steer, throttle)
 
 # References
-var car: VehicleBody3D
+var car: RigidBody3D
 var raycast_sensor: Node3D
 var parking_spot: Area3D
 
@@ -34,7 +34,7 @@ func _ready():
 
 func init(player: Node3D):
 	super.init(player)
-	car = player as VehicleBody3D
+	car = player as RigidBody3D
 
 	# Find raycast sensor child
 	for child in get_children():
@@ -209,19 +209,18 @@ func _physics_process(delta):
 	super._physics_process(delta)
 
 	if heuristic == "human":
-		var steer = 0.0
-		var throttle = 0.0
-
-		if Input.is_action_pressed("ui_left"):
-			steer = 1.0
-		elif Input.is_action_pressed("ui_right"):
-			steer = -1.0
-
-		if Input.is_action_pressed("ui_up"):
-			throttle = 1.0
-		elif Input.is_action_pressed("ui_down"):
-			throttle = -1.0
+		var target_steer = 0.0
+		if Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT):
+			target_steer -= 1.0
+		if Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT):
+			target_steer += 1.0
+			
+		var target_throttle = 0.0
+		if Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP):
+			target_throttle += 1.0
+		if Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN):
+			target_throttle -= 1.0
 
 		if car:
-			car.steer_input = steer
-			car.throttle_input = throttle
+			car.steer_input = lerp(car.steer_input, target_steer, delta * 12.0)
+			car.throttle_input = lerp(car.throttle_input, target_throttle, delta * 20.0)

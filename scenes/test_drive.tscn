@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://bwbnnym1jo5h0"]
+
+[ext_resource type="Script" uid="uid://w7rc0m4vgjga" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
+[ext_resource type="PackedScene" uid="uid://cphg0pfm8plid" path="res://scenes/parking_lot.tscn" id="2_lot"]
+[ext_resource type="Script" uid="uid://l8dq0k2j8oix" path="res://scenes/speedometer.gd" id="3_38kcf"]
+
+[node name="TestDrive" type="Node3D" unique_id=1037651776]
+
+[node name="Sync" type="Node" parent="." unique_id=341420133]
+script = ExtResource("1_sync")
+control_mode = 0
+action_repeat = 1
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=610680606]
+transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 20, 0)
+shadow_enabled = true
+
+[node name="ParkingLot" parent="." unique_id=1134769445 instance=ExtResource("2_lot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.069867134, -0.074359894, -0.08908939)
+
+[node name="Speedometer" type="CanvasLayer" parent="." unique_id=1425682102]
+script = ExtResource("3_38kcf")
+
+[node name="SpeedLabel" type="Label" parent="Speedometer" unique_id=881359152]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -23.0
