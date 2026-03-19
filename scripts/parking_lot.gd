@@ -49,6 +49,9 @@ func _ready():
 
 	_setup_target()
 
+	# Wait 1 frame for sync.gd to set heuristic (it runs after _ready)
+	await get_tree().process_frame
+
 	# Detect training mode
 	_is_training = ai_controller and ai_controller.heuristic != "human"
 
