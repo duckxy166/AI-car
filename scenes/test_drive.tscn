@@ -1,8 +1,32 @@
-[gd_scene format=3 uid="uid://bwbnnym1jo5h0"]
+[gd_scene load_steps=5 format=3 uid="uid://bwbnnym1jo5h0"]
 
 [ext_resource type="Script" uid="uid://w7rc0m4vgjga" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
 [ext_resource type="PackedScene" uid="uid://cphg0pfm8plid" path="res://scenes/parking_lot.tscn" id="2_lot"]
 [ext_resource type="Script" uid="uid://l8dq0k2j8oix" path="res://scenes/speedometer.gd" id="3_38kcf"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
+sky_top_color = Color(0.25, 0.45, 0.85, 1)
+sky_horizon_color = Color(0.65, 0.75, 0.92, 1)
+ground_bottom_color = Color(0.18, 0.15, 0.12, 1)
+ground_horizon_color = Color(0.55, 0.55, 0.5, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMat")
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 2
+ambient_light_color = Color(0.75, 0.8, 0.95, 1)
+ambient_light_energy = 0.4
+tonemap_mode = 2
+tonemap_white = 6.0
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 1.5
+glow_enabled = true
+glow_intensity = 0.3
+glow_bloom = 0.1
 
 [node name="TestDrive" type="Node3D" unique_id=1037651776]
 
@@ -11,8 +35,13 @@ script = ExtResource("1_sync")
 control_mode = 0
 action_repeat = 1
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=610680606]
 transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 20, 0)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.3
 shadow_enabled = true
 
 [node name="ParkingLot" parent="." unique_id=1134769445 instance=ExtResource("2_lot")]

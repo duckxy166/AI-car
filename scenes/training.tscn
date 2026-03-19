@@ -3,6 +3,12 @@
 [ext_resource type="Script" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
 [ext_resource type="PackedScene" path="res://scenes/parking_lot.tscn" id="2_lot"]
 
+[sub_resource type="Environment" id="env"]
+background_mode = 1
+background_color = Color(0.3, 0.35, 0.4, 1)
+ambient_light_source = 1
+ambient_light_energy = 0.6
+
 [node name="Training" type="Node3D"]
 
 [node name="Sync" type="Node" parent="."]
@@ -11,11 +17,14 @@ control_mode = 1
 action_repeat = 4
 speed_up = 8.0
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 20, 0)
-shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 75, 80, 25)
+fov = 70.0
+current = true
 
 [node name="Env0" parent="." instance=ExtResource("2_lot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

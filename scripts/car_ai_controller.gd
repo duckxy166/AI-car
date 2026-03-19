@@ -19,6 +19,7 @@ var _previous_angle_diff := PI
 var _episode_steps := 0
 var _is_in_spot := false
 var _parked_frames := 0  # Count frames car stays parked correctly
+var _parking_time := 0.0  # Time taken to park (set by parking_lot.gd)
 const PARKED_THRESHOLD := 30  # Frames needed to confirm parked
 
 # Limits for normalization
@@ -139,6 +140,9 @@ func get_reward() -> float:
 
 			if _parked_frames >= PARKED_THRESHOLD:
 				total_reward += 10.0  # Big success bonus
+				# Time bonus: faster parking = higher reward (max +10 if instant, 0 if >= 20s)
+				var time_bonus = maxf(0.0, 10.0 - _parking_time * 0.5)
+				total_reward += time_bonus
 				done = true
 		else:
 			_parked_frames = max(0, _parked_frames - 1)
@@ -189,6 +193,7 @@ func reset():
 	_episode_steps = 0
 	_is_in_spot = false
 	_parked_frames = 0
+	_parking_time = 0.0
 
 	if car:
 		car.reset_to_spawn()
@@ -202,6 +207,10 @@ func set_parking_target(pos: Vector3, rot_y: float):
 
 func set_in_parking_spot(value: bool):
 	_is_in_spot = value
+
+
+func set_parking_time(time: float):
+	_parking_time = time
 
 
 ## Human control for testing

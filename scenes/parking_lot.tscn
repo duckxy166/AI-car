@@ -7,7 +7,8 @@
 friction = 0.8
 
 [sub_resource type="StandardMaterial3D" id="Mat_ground"]
-albedo_color = Color(0.22, 0.22, 0.25, 1)
+albedo_color = Color(0.28, 0.32, 0.22, 1)
+roughness = 0.95
 
 [sub_resource type="BoxMesh" id="Mesh_ground"]
 material = SubResource("Mat_ground")
@@ -17,7 +18,8 @@ size = Vector3(60, 0.2, 60)
 size = Vector3(60, 0.2, 60)
 
 [sub_resource type="StandardMaterial3D" id="Mat_road"]
-albedo_color = Color(0.35, 0.35, 0.38, 1)
+albedo_color = Color(0.18, 0.18, 0.2, 1)
+roughness = 0.85
 
 [sub_resource type="BoxMesh" id="Mesh_road_vert"]
 material = SubResource("Mat_road")
@@ -35,7 +37,8 @@ size = Vector3(16, 0.02, 16)
 size = Vector3(0.5, 2, 35)
 
 [sub_resource type="StandardMaterial3D" id="Mat_wall"]
-albedo_color = Color(0.7, 0.7, 0.65, 1)
+albedo_color = Color(0.85, 0.82, 0.75, 1)
+roughness = 0.7
 
 [sub_resource type="BoxMesh" id="Mesh_oleft"]
 material = SubResource("Mat_wall")
@@ -102,7 +105,10 @@ size = Vector3(3.8501282, 4, 1.8565674)
 
 [sub_resource type="StandardMaterial3D" id="Mat_spot"]
 transparency = 1
-albedo_color = Color(0.2, 0.8, 0.3, 0.4)
+albedo_color = Color(0.1, 0.9, 0.3, 0.5)
+emission_enabled = true
+emission = Color(0.1, 0.8, 0.2, 1)
+emission_energy_multiplier = 0.3
 
 [sub_resource type="BoxMesh" id="Mesh_spot"]
 material = SubResource("Mat_spot")
@@ -112,23 +118,23 @@ size = Vector3(3, 0.05, 5.5)
 size = Vector3(2, 1.2, 4.5)
 
 [sub_resource type="StandardMaterial3D" id="Mat_blue"]
-albedo_color = Color(0.1, 0.2, 0.7, 1)
-metallic = 0.3
-roughness = 0.4
+albedo_color = Color(0.08, 0.15, 0.65, 1)
+metallic = 0.6
+roughness = 0.25
 
 [sub_resource type="BoxMesh" id="BoxMesh_rmsgb"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_white"]
-albedo_color = Color(0.9, 0.9, 0.95, 1)
-metallic = 0.2
-roughness = 0.5
+albedo_color = Color(0.95, 0.95, 0.97, 1)
+metallic = 0.5
+roughness = 0.2
 
 [sub_resource type="BoxMesh" id="BoxMesh_h57tm"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_red"]
-albedo_color = Color(0.7, 0.1, 0.1, 1)
-metallic = 0.3
-roughness = 0.4
+albedo_color = Color(0.75, 0.05, 0.05, 1)
+metallic = 0.6
+roughness = 0.25
 
 [sub_resource type="BoxMesh" id="BoxMesh_pekt7"]
 
@@ -310,6 +316,8 @@ fov = 60.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2112899688]
 transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 20, 0)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.3
 shadow_enabled = true
 
 [node name="TimerHUD" type="CanvasLayer" parent="." unique_id=796574208]
