@@ -1,0 +1,20 @@
+# Godot auto-generated files
+.godot/
+
+# Claude Code local settings
+.claude/
+
+# Mono / C# build artifacts
+.mono/
+data_*/
+mono_crash.*.json
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
