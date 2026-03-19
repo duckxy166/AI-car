@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://chlxd6dtcblaq"]
 
-[ext_resource type="Script" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
-[ext_resource type="PackedScene" path="res://scenes/parking_lot.tscn" id="2_lot"]
+[ext_resource type="Script" uid="uid://w7rc0m4vgjga" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
+[ext_resource type="PackedScene" uid="uid://cphg0pfm8plid" path="res://scenes/parking_lot.tscn" id="2_lot"]
 
 [sub_resource type="Environment" id="env"]
 background_mode = 1
@@ -9,43 +9,44 @@ background_color = Color(0.3, 0.35, 0.4, 1)
 ambient_light_source = 1
 ambient_light_energy = 0.6
 
-[node name="Training" type="Node3D"]
+[node name="Training" type="Node3D" unique_id=2039221728]
 
-[node name="Sync" type="Node" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1279153805]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Sync" type="Node" parent="." unique_id=2042551959]
 script = ExtResource("1_sync")
-control_mode = 1
 action_repeat = 4
 speed_up = 8.0
 
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1368585058]
 environment = SubResource("env")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=746727684]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 75, 80, 25)
-fov = 70.0
 current = true
+fov = 70.0
 
-[node name="Env0" parent="." instance=ExtResource("2_lot")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="Env0" parent="." unique_id=1868210491 instance=ExtResource("2_lot")]
 
-[node name="Env1" parent="." instance=ExtResource("2_lot")]
+[node name="Env1" parent="." unique_id=312629246 instance=ExtResource("2_lot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 0)
 
-[node name="Env2" parent="." instance=ExtResource("2_lot")]
+[node name="Env2" parent="." unique_id=272336326 instance=ExtResource("2_lot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0)
 
-[node name="Env3" parent="." instance=ExtResource("2_lot")]
+[node name="Env3" parent="." unique_id=136914972 instance=ExtResource("2_lot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
 
-[node name="Env4" parent="." instance=ExtResource("2_lot")]
+[node name="Env4" parent="." unique_id=1621350590 instance=ExtResource("2_lot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
 
-[node name="Env5" parent="." instance=ExtResource("2_lot")]
+[node name="Env5" parent="." unique_id=1365209302 instance=ExtResource("2_lot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50)
 
-[node name="Env6" parent="." instance=ExtResource("2_lot")]
+[node name="Env6" parent="." unique_id=963985412 instance=ExtResource("2_lot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 50)
 
-[node name="Env7" parent="." instance=ExtResource("2_lot")]
+[node name="Env7" parent="." unique_id=1925965015 instance=ExtResource("2_lot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 50)
