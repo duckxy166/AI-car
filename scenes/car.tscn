@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/car.gd" id="1_car"]
+[ext_resource type="Script" path="res://scripts/car_ai_controller.gd" id="2_ai"]
+[ext_resource type="ArrayMesh" uid="uid://2fporfur1qjp" path="res://asset/car/lamb.obj" id="3_mesh"]
+[ext_resource type="Script" path="res://addons/godot_rl_agents/sensors/sensors_3d/RaycastSensor3D.gd" id="4_raycast"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(2.0, 1.0, 4.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_car"]
+albedo_color = Color(0.9, 0.15, 0.1, 1.0)
+metallic = 0.3
+roughness = 0.4
+
+[node name="Car" type="VehicleBody3D"]
+mass = 1200.0
+script = ExtResource("1_car")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="CarMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = ExtResource("3_mesh")
+material_override = SubResource("StandardMaterial3D_car")
+
+[node name="WheelFL" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.1, 1.4)
+use_as_traction = true
+use_as_steering = true
+wheel_radius = 0.35
+wheel_rest_length = 0.2
+wheel_friction_slip = 3.0
+suspension_stiffness = 50.0
+suspension_travel = 0.2
+damping_compression = 2.0
+damping_relaxation = 3.0
+
+[node name="WheelFR" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.1, 1.4)
+use_as_traction = true
+use_as_steering = true
+wheel_radius = 0.35
+wheel_rest_length = 0.2
+wheel_friction_slip = 3.0
+suspension_stiffness = 50.0
+suspension_travel = 0.2
+damping_compression = 2.0
+damping_relaxation = 3.0
+
+[node name="WheelRL" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.1, -1.4)
+wheel_radius = 0.35
+wheel_rest_length = 0.2
+wheel_friction_slip = 3.0
+suspension_stiffness = 50.0
+suspension_travel = 0.2
+damping_compression = 2.0
+damping_relaxation = 3.0
+
+[node name="WheelRR" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.1, -1.4)
+wheel_radius = 0.35
+wheel_rest_length = 0.2
+wheel_friction_slip = 3.0
+suspension_stiffness = 50.0
+suspension_travel = 0.2
+damping_compression = 2.0
+damping_relaxation = 3.0
+
+[node name="AIController3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+script = ExtResource("2_ai")
+
+[node name="RayCastSensor3D" type="Node3D" parent="AIController3D"]
+script = ExtResource("4_raycast")
+n_rays_width = 12.0
+n_rays_height = 1.0
+ray_length = 15.0
+cone_width = 360.0
+cone_height = 0.0
+collide_with_areas = false
+collide_with_bodies = true
