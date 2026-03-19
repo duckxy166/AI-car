@@ -63,10 +63,10 @@ func _ready():
 
 	# Create name label above car
 	_name_label = Label3D.new()
-	_name_label.position = Vector3(0, 4.0, 0)
-	_name_label.font_size = 256
-	_name_label.outline_size = 32
-	_name_label.pixel_size = 0.015
+	_name_label.position = Vector3(0, 3.0, 0)
+	_name_label.font_size = 128
+	_name_label.outline_size = 12
+	_name_label.pixel_size = 0.008
 	_name_label.modulate = Color(1, 1, 0.2)
 	_name_label.outline_modulate = Color(0, 0, 0)
 	_name_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED

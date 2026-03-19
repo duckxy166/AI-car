@@ -20,6 +20,7 @@ var _player_name := ""
 var _reset_count := 0
 var _success_count := 0
 var _result_visible_timer := 0.0
+var _r_held := false
 
 # Spawn configuration (vertical road section)
 var _spawn_positions := [
@@ -96,18 +97,25 @@ func _physics_process(_delta):
 		_reset_environment()
 
 	# Check parked: in spot + nearly stopped
+	if _parked and car:
+		var vel = car.linear_velocity.length()
+		print("IN SPOT vel=", vel, " timer_running=", _timer_running)
 	if _timer_running and _parked and car:
-		if car.linear_velocity.length() < 0.5:
+		var vel = car.linear_velocity.length()
+		if vel < 1.5:
 			_timer_running = false
 			if _timer < _best_time:
 				_best_time = _timer
 			_show_result()
 
-	# Reset with R key
-	if Input.is_physical_key_pressed(KEY_R):
+	# Reset with R key (just_pressed prevents repeat on hold)
+	if Input.is_key_pressed(KEY_R) and not _r_held:
+		_r_held = true
 		_reset_count += 1
 		_reset_environment()
 		_start_timer()
+	elif not Input.is_key_pressed(KEY_R):
+		_r_held = false
 
 
 func _show_result():
@@ -130,6 +138,7 @@ func _start_timer():
 	_timer = 0.0
 	_timer_running = true
 	_parked = false
+	_result_visible_timer = 0.0
 
 
 func _update_hud():
@@ -201,6 +210,7 @@ func _reset_environment():
 
 
 func _on_parking_entered(body: Node3D):
+	print("PARKING ENTERED: ", body.name, " car=", car.name if car else "null", " match=", body == car)
 	if body == car:
 		_parked = true
 		if ai_controller:
@@ -208,6 +218,7 @@ func _on_parking_entered(body: Node3D):
 
 
 func _on_parking_exited(body: Node3D):
+	print("PARKING EXITED: ", body.name)
 	if body == car:
 		_parked = false
 		if ai_controller:

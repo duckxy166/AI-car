@@ -98,7 +98,7 @@ material = SubResource("Mat_wall")
 size = Vector3(16, 2, 0.5)
 
 [sub_resource type="BoxShape3D" id="Shape_parking"]
-size = Vector3(3, 0.5, 5.5)
+size = Vector3(3.8501282, 4, 1.8565674)
 
 [sub_resource type="StandardMaterial3D" id="Mat_spot"]
 transparency = 1
@@ -252,9 +252,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.3, 10)
 collision_layer = 8
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ParkingTarget" unique_id=1660511397]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09232712, 0, 1.9994669)
 shape = SubResource("Shape_parking")
 
 [node name="SpotVisual" type="MeshInstance3D" parent="ParkingTarget" unique_id=17865247]
+transform = Transform3D(0.98743314, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.3175373)
 mesh = SubResource("Mesh_spot")
 
 [node name="ObstacleCar1" type="StaticBody3D" parent="." unique_id=650135509]
@@ -350,7 +352,7 @@ theme_override_colors/font_color = Color(0.3, 1, 0.4, 1)
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
-[node name="StatsLabel" type="Label" parent="TimerHUD/Panel"]
+[node name="StatsLabel" type="Label" parent="TimerHUD/Panel" unique_id=105486448]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 108.0
@@ -361,7 +363,7 @@ theme_override_font_sizes/font_size = 14
 text = "Attempts: 0  |  Success: 0"
 horizontal_alignment = 1
 
-[node name="ResultLabel" type="Label" parent="TimerHUD"]
+[node name="ResultLabel" type="Label" parent="TimerHUD" unique_id=178735963]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5

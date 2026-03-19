@@ -60,7 +60,7 @@ func _apply_acceleration(collision_point: Vector3):
 	car.apply_force(accel_dir * force, apply_point - car.global_position)
 
 
-func _apply_lateral_grip(delta: float, collision_point: Vector3):
+func _apply_lateral_grip(_delta: float, collision_point: Vector3):
 	var dir = global_basis.x
 	var tire_vel = _get_point_velocity(global_position)
 	var lateral_vel = dir.dot(tire_vel)
