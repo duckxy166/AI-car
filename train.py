@@ -25,7 +25,7 @@ def parse_args():
                         help="Path to Godot executable (None = connect to running editor)")
     parser.add_argument("--speedup", type=int, default=8,
                         help="Training speedup factor")
-    parser.add_argument("--total_timesteps", type=int, default=500_000,
+    parser.add_argument("--total_timesteps", type=int, default=2_000_000,
                         help="Total training timesteps")
     parser.add_argument("--lr", type=float, default=3e-4,
                         help="Learning rate")
@@ -51,11 +51,18 @@ def parse_args():
                         help="Path to model zip to resume training from")
     parser.add_argument("--export_onnx", action="store_true",
                         help="Export ONNX after training")
+    parser.add_argument("--export_only", type=str, default=None,
+                        help="Export ONNX from saved model (no training). Pass path to .zip model")
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
+
+    # Export-only mode: no training needed, no Godot connection
+    if args.export_only:
+        export_from_saved(args.export_only)
+        return
 
     # Create output directories
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -98,7 +105,7 @@ def main():
         model = PPO.load(args.resume, env=env)
     else:
         model = PPO(
-            "MlpPolicy",
+            "MultiInputPolicy",
             env,
             learning_rate=args.lr,
             n_steps=args.n_steps,
@@ -142,13 +149,15 @@ def main():
 
     # Export ONNX if requested
     if args.export_onnx:
-        export_to_onnx(model, log_dir, env)
+        # Get obs size from Dict observation space
+        obs_size = env.observation_space["obs"].shape[0]
+        export_to_onnx(model, log_dir, obs_size)
 
     env.close()
     print("\nDone!")
 
 
-def export_to_onnx(model, log_dir, env):
+def export_to_onnx(model, log_dir, obs_size=21):
     """Export trained model to ONNX format for Godot inference"""
     try:
         import torch
@@ -157,26 +166,25 @@ def export_to_onnx(model, log_dir, env):
         onnx_path = f"{log_dir}/parking_model.onnx"
         print(f"\nExporting ONNX model to: {onnx_path}")
 
-        # Get the policy network
         policy = model.policy
-
-        # Create dummy input matching observation space
-        obs_size = env.observation_space.shape[0]
         dummy_input = torch.randn(1, obs_size)
 
-        # Export
         class PolicyWrapper(torch.nn.Module):
             def __init__(self, policy):
                 super().__init__()
-                self.policy = policy
+                # Copy the layers directly so torch.onnx can trace them
+                self.features_extractor = policy.features_extractor
+                self.mlp_extractor = policy.mlp_extractor
+                self.action_net = policy.action_net
+                self.log_std = policy.log_std
 
             def forward(self, obs):
-                # Returns action means and log_std
-                features = self.policy.extract_features(obs)
-                latent_pi = self.policy.mlp_extractor.forward_actor(features)
-                mean_actions = self.policy.action_net(latent_pi)
-                log_std = self.policy.log_std
-                return torch.cat([mean_actions, log_std.expand_as(mean_actions)], dim=-1)
+                # MultiInputPolicy features_extractor expects dict,
+                # but for ONNX we extract the 'obs' key's extractor directly
+                features = self.features_extractor.extractors["obs"](obs)
+                latent_pi = self.mlp_extractor.forward_actor(features)
+                mean_actions = self.action_net(latent_pi)
+                return torch.cat([mean_actions, self.log_std.expand_as(mean_actions)], dim=-1)
 
         wrapper = PolicyWrapper(policy)
         wrapper.eval()
@@ -188,15 +196,41 @@ def export_to_onnx(model, log_dir, env):
             input_names=["obs"],
             output_names=["output"],
             dynamic_axes={"obs": {0: "batch"}, "output": {0: "batch"}},
-            opset_version=17,
+            opset_version=15,
+            dynamo=False,
         )
 
         print(f"ONNX model exported successfully!")
-        print(f"Copy '{onnx_path}' to your Godot project and set it on the Sync node.")
+        print(f"Copy to: model/parking_model.onnx")
+
+        # Auto-copy to model/ folder
+        model_dir = "model"
+        os.makedirs(model_dir, exist_ok=True)
+        import shutil
+        dest = os.path.join(model_dir, "parking_model.onnx")
+        shutil.copy2(onnx_path, dest)
+        print(f"Copied to: {dest}")
 
     except Exception as e:
+        import traceback
         print(f"ONNX export failed: {e}")
-        print("You can export manually later using the saved .zip model.")
+        traceback.print_exc()
+
+
+def export_from_saved(model_path: str):
+    """Export ONNX from a previously saved model (no Godot needed)"""
+    print("=" * 60)
+    print("  ONNX Export from Saved Model")
+    print("=" * 60)
+    print(f"  Model: {model_path}")
+
+    if not os.path.exists(model_path):
+        print(f"ERROR: Model file not found: {model_path}")
+        return
+
+    model = PPO.load(model_path)
+    log_dir = os.path.dirname(model_path)
+    export_to_onnx(model, log_dir)
 
 
 if __name__ == "__main__":

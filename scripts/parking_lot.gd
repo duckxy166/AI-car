@@ -108,13 +108,15 @@ func _reset_environment():
 	var idx = 0
 	if randomize_spawn:
 		idx = randi() % _spawn_positions.size()
-
-	car.reset_car(_spawn_positions[idx], _spawn_rotations[idx])
-	_setup_target()
-	_start_timer()
+	# ใช้ global_position ของ ParkingLot เป็น offset เพื่อให้แต่ละ Env แยกกัน
+	var world_pos = global_position + _spawn_positions[idx]
+	car.reset_car(world_pos, _spawn_rotations[idx])
 
 	if ai_controller:
 		ai_controller.reset()
+
+	_setup_target()  # ต้องมาหลัง reset เพื่อตั้ง _previous_distance ถูก
+	_start_timer()
 
 
 func _on_parking_entered(body: Node3D):

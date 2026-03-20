@@ -18,12 +18,23 @@ func _ready():
 		_parking_lot.parking_success.connect(_on_parking_success)
 		_parking_lot.timer_updated.connect(_on_timer_updated)
 
-	# Pause game until name entered
-	_parking_lot._game_started = false
-	$NameInputHUD.visible = true
-	$TimerHUD.visible = false
-	$NameInputHUD/Panel/NameEdit.text_submitted.connect(_on_name_submitted)
-	$NameInputHUD/Panel/NameEdit.grab_focus()
+	# Check if AI mode (Sync control_mode != HUMAN)
+	var sync = get_parent().get_node("Sync")
+	var is_ai_mode = sync and sync.control_mode != 0  # 0 = HUMAN
+
+	if is_ai_mode:
+		# AI mode: skip name input, auto-start with "สมศักดิ์"
+		$NameInputHUD.visible = false
+		$TimerHUD.visible = true
+		if _car:
+			_car.set_player_name("สมศักดิ์")
+	else:
+		# Human mode: show name input
+		_parking_lot._game_started = false
+		$NameInputHUD.visible = true
+		$TimerHUD.visible = false
+		$NameInputHUD/Panel/NameEdit.text_submitted.connect(_on_name_submitted)
+		$NameInputHUD/Panel/NameEdit.grab_focus()
 
 
 func _on_name_submitted(name_text: String):

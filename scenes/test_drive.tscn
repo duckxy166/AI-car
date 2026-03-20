@@ -1,9 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwbnnym1jo5h0"]
+[gd_scene format=3 uid="uid://bwbnnym1jo5h0"]
 
 [ext_resource type="Script" uid="uid://w7rc0m4vgjga" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
 [ext_resource type="PackedScene" uid="uid://cphg0pfm8plid" path="res://scenes/parking_lot.tscn" id="2_lot"]
 [ext_resource type="Script" uid="uid://l8dq0k2j8oix" path="res://scenes/speedometer.gd" id="3_38kcf"]
-[ext_resource type="Script" path="res://scripts/test_drive_hud.gd" id="4_hud"]
+[ext_resource type="Script" uid="uid://cxfrq1iybaihh" path="res://scripts/test_drive_hud.gd" id="4_hud"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 sky_top_color = Color(0.25, 0.45, 0.85, 1)
@@ -36,7 +36,7 @@ script = ExtResource("1_sync")
 control_mode = 0
 action_repeat = 1
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=912862611]
 environment = SubResource("Env")
 
 [node name="ParkingLot" parent="." unique_id=1134769445 instance=ExtResource("2_lot")]
@@ -54,18 +54,18 @@ anchor_bottom = 1.0
 offset_left = -1.0
 offset_top = -23.0
 
-[node name="GameHUD" type="Node" parent="."]
+[node name="GameHUD" type="Node" parent="." unique_id=928210350]
 script = ExtResource("4_hud")
 
-[node name="TimerHUD" type="CanvasLayer" parent="GameHUD"]
+[node name="TimerHUD" type="CanvasLayer" parent="GameHUD" unique_id=1398214956]
 
-[node name="Panel" type="Panel" parent="GameHUD/TimerHUD"]
+[node name="Panel" type="Panel" parent="GameHUD/TimerHUD" unique_id=1682144994]
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 280.0
 offset_bottom = 150.0
 
-[node name="TimeLabel" type="Label" parent="GameHUD/TimerHUD/Panel"]
+[node name="TimeLabel" type="Label" parent="GameHUD/TimerHUD/Panel" unique_id=1858257227]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 8.0
@@ -76,7 +76,7 @@ theme_override_font_sizes/font_size = 40
 text = "0:00.00"
 horizontal_alignment = 1
 
-[node name="StatusLabel" type="Label" parent="GameHUD/TimerHUD/Panel"]
+[node name="StatusLabel" type="Label" parent="GameHUD/TimerHUD/Panel" unique_id=108618331]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 58.0
@@ -87,7 +87,7 @@ theme_override_font_sizes/font_size = 18
 text = "PARK IT! (R = restart)"
 horizontal_alignment = 1
 
-[node name="BestLabel" type="Label" parent="GameHUD/TimerHUD/Panel"]
+[node name="BestLabel" type="Label" parent="GameHUD/TimerHUD/Panel" unique_id=600773287]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 85.0
@@ -97,7 +97,7 @@ theme_override_colors/font_color = Color(0.3, 1, 0.4, 1)
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
-[node name="StatsLabel" type="Label" parent="GameHUD/TimerHUD/Panel"]
+[node name="StatsLabel" type="Label" parent="GameHUD/TimerHUD/Panel" unique_id=1871411133]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 108.0
@@ -108,7 +108,7 @@ theme_override_font_sizes/font_size = 14
 text = "Attempts: 0  |  Success: 0"
 horizontal_alignment = 1
 
-[node name="ResultLabel" type="Label" parent="GameHUD/TimerHUD"]
+[node name="ResultLabel" type="Label" parent="GameHUD/TimerHUD" unique_id=2085460691]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -125,9 +125,9 @@ text = "PARKED!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="NameInputHUD" type="CanvasLayer" parent="GameHUD"]
+[node name="NameInputHUD" type="CanvasLayer" parent="GameHUD" unique_id=1600751577]
 
-[node name="Panel" type="Panel" parent="GameHUD/NameInputHUD"]
+[node name="Panel" type="Panel" parent="GameHUD/NameInputHUD" unique_id=1850862375]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -138,7 +138,7 @@ offset_top = -80.0
 offset_right = 200.0
 offset_bottom = 80.0
 
-[node name="Title" type="Label" parent="GameHUD/NameInputHUD/Panel"]
+[node name="Title" type="Label" parent="GameHUD/NameInputHUD/Panel" unique_id=1374658839]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 10.0
@@ -149,7 +149,7 @@ theme_override_font_sizes/font_size = 24
 text = "ENTER YOUR NAME"
 horizontal_alignment = 1
 
-[node name="NameEdit" type="LineEdit" parent="GameHUD/NameInputHUD/Panel"]
+[node name="NameEdit" type="LineEdit" parent="GameHUD/NameInputHUD/Panel" unique_id=475595074]
 layout_mode = 0
 offset_left = 40.0
 offset_top = 55.0
@@ -159,7 +159,7 @@ theme_override_font_sizes/font_size = 20
 placeholder_text = "Player"
 alignment = 1
 
-[node name="Hint" type="Label" parent="GameHUD/NameInputHUD/Panel"]
+[node name="Hint" type="Label" parent="GameHUD/NameInputHUD/Panel" unique_id=919726512]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 100.0
