@@ -72,7 +72,7 @@ func _physics_process(_delta):
 
 	# Check parked: in spot + nearly stopped
 	if _timer_running and _parked and car:
-		if car.linear_velocity.length() < 1.5:
+		if car.linear_velocity.length() < 1.0:
 			_timer_running = false
 			if ai_controller:
 				ai_controller.set_parking_time(_timer)
@@ -95,8 +95,11 @@ func _start_timer():
 
 func _setup_target():
 	if ai_controller and parking_target:
+		# ใช้ตำแหน่ง ParkingTarget ตรงๆ (user ตั้งไว้ถูกต้องแล้ว)
+		var target_pos = parking_target.global_position
+		target_pos.y = 0  # ไม่สนใจ Y
 		ai_controller.set_parking_target(
-			parking_target.global_position,
+			target_pos,
 			parking_target.rotation.y
 		)
 

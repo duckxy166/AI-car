@@ -31,16 +31,20 @@ glow_bloom = 0.05
 
 [node name="TestDrive" type="Node3D" unique_id=1037651776]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=204497995]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
 [node name="Sync" type="Node" parent="." unique_id=341420133]
 script = ExtResource("1_sync")
-control_mode = 0
 action_repeat = 1
+onnx_model_path = "res://model/parking_model.onnx"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=912862611]
 environment = SubResource("Env")
 
 [node name="ParkingLot" parent="." unique_id=1134769445 instance=ExtResource("2_lot")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.069867134, -0.074359894, -0.08908939)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0213003, 0.11299181, 1.1082048)
 
 [node name="Speedometer" type="CanvasLayer" parent="." unique_id=1425682102]
 script = ExtResource("3_38kcf")

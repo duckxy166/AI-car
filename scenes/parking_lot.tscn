@@ -101,7 +101,7 @@ material = SubResource("Mat_wall")
 size = Vector3(16, 2, 0.5)
 
 [sub_resource type="BoxShape3D" id="Shape_parking"]
-size = Vector3(3.8501282, 4, 1.8565674)
+size = Vector3(2.5326862, 4, 3.5588722)
 
 [sub_resource type="StandardMaterial3D" id="Mat_spot"]
 transparency = 1
@@ -156,7 +156,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.11, -5)
 mesh = SubResource("Mesh_road_vert")
 
 [node name="RoadHoriz" type="MeshInstance3D" parent="." unique_id=1789362592]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.007805, 0.15792952, 9.960421)
+transform = Transform3D(1.3486464, 0, 0, 0, 1, 0, 0, 0, 1, 5.007805, 0.15792952, 9.960421)
 mesh = SubResource("Mesh_road_horiz")
 
 [node name="RoadCurve" type="MeshInstance3D" parent="." unique_id=1263543658]
@@ -254,15 +254,15 @@ shape = SubResource("Shape_ihoriz")
 mesh = SubResource("Mesh_ihoriz")
 
 [node name="ParkingTarget" type="Area3D" parent="." unique_id=2122023094]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.3, 10)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 20, 0.3, 10)
 collision_layer = 8
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ParkingTarget" unique_id=1660511397]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09232712, 0, 1.9994669)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11067963, -0.5369911, -2.4899616)
 shape = SubResource("Shape_parking")
 
 [node name="SpotVisual" type="MeshInstance3D" parent="ParkingTarget" unique_id=17865247]
-transform = Transform3D(0.98743314, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.3175373)
+transform = Transform3D(0.98743314, 0, 0, 0, 1, 0, 0, 0, 1, -0.038053513, -0.01843071, -2.0217762)
 mesh = SubResource("Mesh_spot")
 
 [node name="ObstacleCar1" type="StaticBody3D" parent="." unique_id=650135509]

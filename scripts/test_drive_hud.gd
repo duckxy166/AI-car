@@ -28,6 +28,8 @@ func _ready():
 		$TimerHUD.visible = true
 		if _car:
 			_car.set_player_name("สมศักดิ์")
+		_parking_lot._game_started = true
+		_parking_lot._start_timer()
 	else:
 		# Human mode: show name input
 		_parking_lot._game_started = false

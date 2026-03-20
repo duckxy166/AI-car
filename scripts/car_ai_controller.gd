@@ -32,6 +32,7 @@ var _waypoints_local := [
 	Vector3(-3, 0, 7),     # กลางโค้ง
 	Vector3(5, 0, 10),     # หลังโค้ง
 	Vector3(15, 0, 10),    # เข้าใกล้ parking
+	Vector3(20, 0, 10),    # หน้าซอง — ตรง ParkingTarget
 ]
 var _waypoints_world: Array[Vector3] = []  # คำนวณตอน runtime จาก env offset
 var _env_offset := Vector3.ZERO  # offset ของ Env (ParkingLot parent)
@@ -41,7 +42,7 @@ const WAYPOINT_RADIUS := 4.0  # ระยะที่นับว่าถึง
 
 func _ready():
 	super._ready()
-	reset_after = 2000  # Long episodes for 39m L-shaped navigation
+	reset_after = 800  # เร็วขึ้น — ไม่จอดใน 800 steps ก็ reset
 
 
 func init(player: Node3D):
@@ -54,17 +55,27 @@ func init(player: Node3D):
 			break
 
 
-func get_obs() -> Dictionary:
-	var obs := []
+func _safe_float(val) -> float:
+	## แปลงค่าใดๆ เป็น float ที่ปลอดภัย (ไม่มี NaN, INF, null)
+	if val == null:
+		return 0.0
+	var f := float(val)
+	if is_nan(f) or is_inf(f):
+		return 0.0
+	return clampf(f, -1.0, 1.0)
 
-	if not car:
-		obs.resize(21)
-		obs.fill(0.0)
+
+func get_obs() -> Dictionary:
+	var obs: Array[float] = []
+	obs.resize(21)
+	obs.fill(0.0)
+
+	if not is_instance_valid(car):
 		return {"obs": obs}
 
 	# 1. Normalized speed [-1, 1]
-	var speed = car.get_speed() / MAX_SPEED
-	obs.append(clampf(speed, -1.0, 1.0))
+	var speed_val = car.get_speed() if car.has_method("get_speed") else 0.0
+	obs[0] = _safe_float(speed_val / MAX_SPEED)
 
 	# 2. Angle to target [-1, 1]
 	var to_target = target_position - car.global_position
@@ -73,36 +84,34 @@ func get_obs() -> Dictionary:
 	if to_target.length() > 0.1:
 		var forward = -car.global_transform.basis.z
 		forward.y = 0
-		angle_to_target = forward.signed_angle_to(to_target.normalized(), Vector3.UP)
-	obs.append(clampf(angle_to_target / PI, -1.0, 1.0))
+		if forward.length() > 0.01:
+			angle_to_target = forward.signed_angle_to(to_target.normalized(), Vector3.UP)
+	obs[1] = _safe_float(angle_to_target / PI)
 
 	# 3. Distance to target [0, 1]
-	var distance = to_target.length() / MAX_DISTANCE
-	obs.append(clampf(distance, 0.0, 1.0))
+	obs[2] = clampf(to_target.length() / MAX_DISTANCE, 0.0, 1.0)
 
-	# 4. Heading alignment [-1, 1] (how well car faces parking direction)
+	# 4. Heading alignment [-1, 1]
 	var car_angle = car.rotation.y
 	var heading_diff = angle_difference(car_angle, target_rotation)
-	obs.append(clampf(heading_diff / PI, -1.0, 1.0))
+	obs[3] = _safe_float(heading_diff / PI)
 
 	# 5-16. Raycast sensor data (12 values)
-	if raycast_sensor:
+	if raycast_sensor and raycast_sensor.has_method("get_observation"):
 		var ray_obs = raycast_sensor.get_observation()
-		for val in ray_obs:
-			obs.append(val)
-	else:
-		for i in 12:
-			obs.append(0.0)
+		if ray_obs != null:
+			for i in mini(ray_obs.size(), 12):
+				obs[4 + i] = _safe_float(ray_obs[i])
 
 	# 17. Local velocity X (lateral)
-	var local_vel = car.get_velocity_local()
-	obs.append(clampf(local_vel.x / MAX_SPEED, -1.0, 1.0))
-
-	# 18. Local velocity Z (forward)
-	obs.append(clampf(local_vel.y / MAX_SPEED, -1.0, 1.0))
+	var local_vel = car.get_velocity_local() if car.has_method("get_velocity_local") else Vector2.ZERO
+	if local_vel != null:
+		obs[16] = _safe_float(local_vel.x / MAX_SPEED)
+		# 18. Local velocity Z (forward)
+		obs[17] = _safe_float(local_vel.y / MAX_SPEED)
 
 	# 19. Is in parking spot
-	obs.append(1.0 if _is_in_spot else 0.0)
+	obs[18] = 1.0 if _is_in_spot else 0.0
 
 	# 20-21. Direction & distance to next waypoint
 	var next_wp = _get_next_waypoint_pos()
@@ -112,9 +121,10 @@ func get_obs() -> Dictionary:
 	if to_wp.length() > 0.1:
 		var fwd = -car.global_transform.basis.z
 		fwd.y = 0
-		angle_to_wp = fwd.signed_angle_to(to_wp.normalized(), Vector3.UP)
-	obs.append(clampf(angle_to_wp / PI, -1.0, 1.0))
-	obs.append(clampf(to_wp.length() / MAX_DISTANCE, 0.0, 1.0))
+		if fwd.length() > 0.01:
+			angle_to_wp = fwd.signed_angle_to(to_wp.normalized(), Vector3.UP)
+	obs[19] = _safe_float(angle_to_wp / PI)
+	obs[20] = clampf(to_wp.length() / MAX_DISTANCE, 0.0, 1.0)
 
 	return {"obs": obs}
 
@@ -153,72 +163,98 @@ func get_reward() -> float:
 		total_reward += (10.0 - current_distance) * 0.01
 
 	# ============================================================
-	# 2. ALIGNMENT REWARD — หันหน้าเข้าซอง (เริ่มให้ตั้งแต่ 10m)
+	# 2. ALIGNMENT REWARD — หันหน้าเข้าซอง (เริ่มให้ตั้งแต่ 15m)
 	# ============================================================
-	if current_distance < 10.0:
+	if current_distance < 15.0:
 		var alignment_delta = _previous_angle_diff - angle_diff
-		total_reward += alignment_delta * 0.5
+		total_reward += alignment_delta * 1.5  # แรงขึ้น 3 เท่า
 		_previous_angle_diff = angle_diff
 
 		# Bonus ถ้าหันถูกทาง
 		if angle_diff < 0.5:  # ~28 degrees
-			total_reward += 0.02
-		if angle_diff < 0.2:  # ~11 degrees
 			total_reward += 0.05
+		if angle_diff < 0.2:  # ~11 degrees
+			total_reward += 0.15
+
+		# PENALTY ถ้าจอดขวาง (มากกว่า 60°)
+		if angle_diff > 1.0:
+			total_reward -= 0.1
 
 	# ============================================================
-	# 3. SPEED CONTROL — ใกล้ spot ควรช้าลง
+	# 3. SPEED CONTROL — ยิ่งใกล้ ยิ่งต้องช้า
 	# ============================================================
-	if current_distance < 5.0 and speed > 5.0:
-		total_reward -= 0.1  # เร็วเกินตอนใกล้
+	if current_distance < 8.0:
+		# เร็วเกินตอนใกล้ = โดน penalty ตาม speed
+		if speed > 3.0:
+			total_reward -= speed * 0.02
+		# ช้าลงตอนใกล้ = ดี
+		if speed < 2.0:
+			total_reward += 0.02
 
 	# ============================================================
 	# 4. COLLISION PENALTY — ชนไม่ตาย แค่เจ็บ
 	# ============================================================
 	if car.is_colliding:
-		total_reward -= 0.3  # ลดจาก 0.5
-		# ชนแรงก็แค่เจ็บกว่า ไม่จบ episode
+		total_reward -= 0.3
 		if speed > 5.0:
 			total_reward -= 0.5
 
 	# ============================================================
-	# 5. PARKING SUCCESS — จอดได้ = ฟินมาก
+	# 5. PARKING SUCCESS — หยุดใน spot = ชนะ
 	# ============================================================
 	if _is_in_spot:
-		# อยู่ใน spot = ดีแล้ว
-		total_reward += 0.1
+		# อยู่ใน spot + หันถูกทาง = ดีมาก
+		if angle_diff < 0.5:  # < 28°
+			total_reward += 0.5
+		elif angle_diff < 0.8:  # < 45°
+			total_reward += 0.2
+		else:
+			total_reward -= 0.3  # จอดขวาง = penalty หนัก
 
-		if speed < 1.5 and angle_diff < 0.5:
+		# BRAKE REWARD — ยิ่งช้า + หันถูก ยิ่งได้เยอะ
+		if speed < 3.0 and angle_diff < 0.5:
+			total_reward += 0.5
+		if speed < 1.0 and angle_diff < 0.3:
+			total_reward += 1.5
+		if speed < 0.3 and angle_diff < 0.2:
+			total_reward += 2.0
+
+		# Alignment bonus ใน spot — ยิ่งตรง ยิ่งได้
+		var align_quality = maxf(0.0, 1.0 - angle_diff / 0.5)
+		total_reward += align_quality * 0.8
+
+		# นับ frame ที่หยุดอยู่ใน spot + หันตรง
+		if speed < 1.0 and angle_diff < 0.35:  # ~20° — ต้องตรง
 			_parked_frames += 1
-			total_reward += 0.3  # ทุก frame ที่จอดอยู่
+			total_reward += 1.0
 
-			if _parked_frames >= 10:  # ลดจาก 30 → 10
-				# SUCCESS! Big bonus
-				total_reward += 15.0
-				# Time bonus
-				var time_bonus = maxf(0.0, 10.0 - _parking_time * 0.5)
+			if _parked_frames >= 5:
+				# SUCCESS! จบ episode
+				var align_bonus = maxf(0.0, 15.0 * (1.0 - angle_diff / 0.35))
+				total_reward += 25.0 + align_bonus
+				var time_bonus = maxf(0.0, 15.0 - _parking_time * 0.3)
 				total_reward += time_bonus
 				done = true
 		else:
-			_parked_frames = max(0, _parked_frames - 1)
+			_parked_frames = max(0, _parked_frames - 2)  # ลดเร็วขึ้น
 	else:
 		_parked_frames = 0
 
 	# ============================================================
-	# 6. TIME PENALTY — อย่ายืดเวลา
+	# 6. TIME PENALTY — อย่ายืดเวลา (เพิ่มขึ้นตามเวลา)
 	# ============================================================
-	total_reward -= 0.005  # ลดจาก 0.01
+	total_reward -= 0.008
 
 	# ============================================================
-	# 7. OUT OF BOUNDS — ตกแมพเท่านั้นที่จบ
+	# 7. OUT OF BOUNDS — ตกแมพจบ
 	# ============================================================
 	if car.global_position.y < -2.0 or car.global_position.y > 5.0:
 		total_reward -= 5.0
 		done = true
 
-	# ไม่เคลื่อนที่นาน = จบ (กัน idle)
-	if _episode_steps > 200 and speed < 0.1 and current_distance > 5.0:
-		total_reward -= 1.0
+	# ไม่เคลื่อนที่นาน = จบ (กัน idle) — เร็วขึ้น
+	if _episode_steps > 100 and speed < 0.1 and current_distance > 5.0:
+		total_reward -= 2.0
 		done = true
 
 	_episode_steps += 1

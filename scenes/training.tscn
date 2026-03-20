@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://w7rc0m4vgjga" path="res://addons/godot_rl_agents/sync.gd" id="1_sync"]
 [ext_resource type="PackedScene" uid="uid://cphg0pfm8plid" path="res://scenes/parking_lot.tscn" id="2_lot"]
+[ext_resource type="Script" uid="uid://scw8i6oar55d" path="res://scenes/camera_3d.gd" id="2_v2b7k"]
 
 [sub_resource type="Environment" id="env"]
 background_mode = 1
@@ -18,7 +19,7 @@ shadow_enabled = true
 [node name="Sync" type="Node" parent="." unique_id=2042551959]
 script = ExtResource("1_sync")
 action_repeat = 4
-speed_up = 16.0
+speed_up = 10.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1368585058]
 environment = SubResource("env")
@@ -27,6 +28,7 @@ environment = SubResource("env")
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 75, 80, 25)
 current = true
 fov = 70.0
+script = ExtResource("2_v2b7k")
 
 [node name="Env0" parent="." unique_id=1868210491 instance=ExtResource("2_lot")]
 
